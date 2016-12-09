@@ -14,7 +14,7 @@ var (
 )
 
 const (
-	Type = "seekret-source-dir"
+	Type = "dir"
 )
 
 type SourceDir struct{}

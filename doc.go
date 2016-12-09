@@ -73,11 +73,11 @@ it by creating your own.
 
 Currently, there are the following different sources supported:
 
-  Directories (and files): https://github.com/18F/seekret-source-dir
+  Directories (and files): https://github.com/18F/seekret/sources/dir
 
     Load all files contained in a directory (and its sub-directories).
 
-  Git Repositories: https://github.com/18F/seekret-source-git
+  Git Repositories: https://github.com/18F/seekret/sources/git
 
     Load git objects from commits or staging area.
 

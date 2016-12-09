@@ -18,7 +18,7 @@ var (
 )
 
 const (
-	Type = "seekret-source-git"
+	Type = "git"
 )
 
 type SourceGit struct{}
