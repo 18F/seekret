@@ -160,7 +160,7 @@ func testRunRuleSample(ts RunRuleSample) bool {
 		}
 	}
 
-	results := r.Run(ts.content)
+	results := r.Run(ts.text)
 
 	ok := true
 	for _, res := range results {

@@ -26,7 +26,7 @@ Installing seekret
 
 ::
 
-    go get github.com/apuigsech/seekret/cmd/seekret
+    go get github.com/18F/seekret/cmd/seekret
 
 
 The requirements for a success installation are:
@@ -137,7 +137,7 @@ Scan all files from all commits in a local repo::
 
 Scan all files from all commits in a remote repo::
 
-    seekret git http://github.com/apuigsech/seekret-exposed
+    seekret git http://github.com/18F/seekret-exposed
 
 Scan all files from the last commit in a local repo::
 
@@ -156,20 +156,20 @@ perform the following hands-on examples:
 
 1. Inspect remote git repository::
 
-    seekret --rules $GOPATH/src/github.com/apuigsech/seekret/rules/ git https://github.com/apuigsech/seekret-secrets.git 
+    seekret --rules $GOPATH/src/github.com/18F/seekret/rules/ git https://github.com/18F/seekret-secrets.git 
 
 2. Inspect local got repository::
 
-    git clone https://github.com/apuigsech/seekret-secrets.git /tmp/seekret-secrets
-    seekret --rules $GOPATH/src/github.com/apuigsech/seekret/rules/ git /tmp/seekret-secrets
+    git clone https://github.com/18F/seekret-secrets.git /tmp/seekret-secrets
+    seekret --rules $GOPATH/src/github.com/18F/seekret/rules/ git /tmp/seekret-secrets
 
 3. Inspect only the last 2 commits::
 
-    seekret --rules $GOPATH/src/github.com/apuigsech/seekret/rules/ git -c 2 /tmp/seekret-secrets
+    seekret --rules $GOPATH/src/github.com/18F/seekret/rules/ git -c 2 /tmp/seekret-secrets
 
 4. Inspect with exceptions::
 
-    seekret --rules $GOPATH/src/github.com/apuigsech/seekret/rules/ -x /tmp/seekret-secrets/.exception_1 git /tmp/seekret-secrets
+    seekret --rules $GOPATH/src/github.com/18F/seekret/rules/ -x /tmp/seekret-secrets/.exception_1 git /tmp/seekret-secrets
 
 
 *******
@@ -181,7 +181,7 @@ Importing seekret Library
 
 ::
 
-    import seekret "github.com/apuigsech/seekret/lib"
+    import seekret "github.com/18F/seekret/lib"
 
 
 Init Seekret context
@@ -317,11 +317,11 @@ Contains a regexp that should match the content.
 
 
 
-.. |Build Status| image:: https://travis-ci.org/apuigsech/seekret.svg
-   :target: https://travis-ci.org/apuigsech/seekret
+.. |Build Status| image:: https://travis-ci.org/18F/seekret.svg
+   :target: https://travis-ci.org/18F/seekret
    :width: 88px
    :height: 20px
-.. |Documentation Status| image:: https://godoc.org/github.com/apuigsech/seekret?status.svg
-   :target: https://godoc.org/github.com/apuigsech/seekret
+.. |Documentation Status| image:: https://godoc.org/github.com/18F/seekret?status.svg
+   :target: https://godoc.org/github.com/18F/seekret
    :width: 88px
    :height: 20px

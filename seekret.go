@@ -7,7 +7,7 @@ package seekret
 
 import (
 	"fmt"
-	"github.com/apuigsech/seekret/models"
+	"github.com/18F/seekret/models"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -134,7 +134,7 @@ func (s *Seekret) LoadRulesFromPath(path string, defaulEnabled bool) error {
 	return nil
 }
 
-const defaultRulesDir = "$GOPATH/src/github.com/apuigsech/seekret/rules"
+const defaultRulesDir = "$GOPATH/src/github.com/18F/seekret/rules"
 
 // DefaultRulesPath return the default PATH that contains rules.
 func DefaultRulesPath() string {

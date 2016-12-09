@@ -27,7 +27,7 @@ Tools Using Seekret
 Seekret is extensible and can cover various use cases. Below there are some
 tools that uses seekret:
 
-  git-seekret: https://github.com/apuigsech/git-seekret
+  git-seekret: https://github.com/18F/git-seekret
 
     Git module that uses local hooks to help develepers to prevent leaking 
     sensitive information in a commit.
@@ -73,11 +73,11 @@ it by creating your own.
 
 Currently, there are the following different sources supported:
 
-  Directories (and files): https://github.com/apuigsech/seekret-source-dir
+  Directories (and files): https://github.com/18F/seekret/sources/dir
 
     Load all files contained in a directory (and its sub-directories).
 
-  Git Repositories: https://github.com/apuigsech/seekret-source-git
+  Git Repositories: https://github.com/18F/seekret/sources/git
 
     Load git objects from commits or staging area.
 

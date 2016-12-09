@@ -7,7 +7,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/apuigsech/seekret/models"
+	"github.com/18F/seekret/models"
 )
 
 func FormatOutput(secretList []models.Secret, format string) string {

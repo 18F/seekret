@@ -9,4 +9,4 @@ before_install:
   - sudo apt-get clean
 
 install:
-  - go get github.com/apuigsech/seekret/cmd/seekret
+  - go get github.com/18F/seekret/cmd/seekret
