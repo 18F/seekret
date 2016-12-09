@@ -7,9 +7,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/apuigsech/seekret"
-	"github.com/apuigsech/seekret-source-dir"
-	"github.com/apuigsech/seekret-source-git"
+	"github.com/18F/seekret"
+	"github.com/18F/seekret/sources/dir"
+	"github.com/18F/seekret/sources/git"
 	"github.com/urfave/cli"
 	"os"
 )

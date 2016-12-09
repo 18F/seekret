@@ -8,7 +8,7 @@ package seekret
 import (
 	"bufio"
 	"bytes"
-	"github.com/apuigsech/seekret/models"
+	"github.com/18F/seekret/models"
 )
 
 type workerJob struct {

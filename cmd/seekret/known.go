@@ -7,8 +7,8 @@ package main
 
 import (
 	"bufio"
-	"github.com/apuigsech/seekret"
-	"github.com/apuigsech/seekret/models"
+	"github.com/18F/seekret"
+	"github.com/18F/seekret/models"
 	"os"
 	"path/filepath"
 )
