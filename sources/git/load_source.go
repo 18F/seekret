@@ -162,30 +162,35 @@ func objectsFromCommit(repo *git.Repository, commitFiles bool, commitMessages bo
 func objectsFromStagedFiles(repo *git.Repository) ([]models.Object, error) {
 	var objectList []models.Object
 
-	index, err := repo.Index()
+	opts := &git.StatusOptions{}
+	opts.Show = git.StatusShowIndexOnly
+	opts.Flags = git.StatusOptRenamesHeadToIndex | git.StatusOptSortCaseSensitively | git.StatusOptUpdateIndex
+	statusList, err := repo.StatusList(opts)
+	if err != nil {
+		return nil, err
+	}
+	defer statusList.Free()
+
+	count, err := statusList.EntryCount()
 	if err != nil {
 		return nil, err
 	}
 
-	for i := 0; i < int(index.EntryCount()); i++ {
-
-		entry, err := index.EntryByIndex(uint(i))
+	for idx := 0; idx < count; idx++ {
+		entry, err := statusList.ByIndex(idx)
 		if err != nil {
 			return nil, err
 		}
 
-		status, err := repo.StatusFile(entry.Path)
-		if err != nil {
-			return nil, err
-		}
-
-		if status != git.StatusCurrent {
-			blob, err := repo.LookupBlob(entry.Id)
+		if entry.Status == git.StatusIndexNew || entry.Status == git.StatusIndexModified ||
+			entry.Status == git.StatusIndexRenamed || entry.Status == git.StatusIndexTypeChange {
+			entryFile := entry.HeadToIndex.NewFile
+			blob, err := repo.LookupBlob(entryFile.Oid)
 			if err != nil {
 				return nil, err
 			}
 
-			o := models.NewObject(entry.Path, Type, "file-content", blob.Contents())
+			o := models.NewObject(entryFile.Path, Type, "file-content", blob.Contents())
 
 			// TODO: Type of staged.
 			o.SetMetadata("status", "staged", models.MetadataAttributes{})
