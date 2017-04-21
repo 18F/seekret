@@ -192,7 +192,6 @@ func objectsFromStagedFiles(repo *git.Repository) ([]models.Object, error) {
 
 			o := models.NewObject(entryFile.Path, Type, "file-content", blob.Contents())
 
-			// TODO: Type of staged.
 			o.SetMetadata("status", "staged", models.MetadataAttributes{})
 			objectList = append(objectList, *o)
 		}
@@ -295,7 +294,7 @@ func openGitRepoRemote(gitUri string) (*git.Repository, error) {
 }
 
 func openGitRepoLocal(source string) (*git.Repository, error) {
-	repo, err := git.OpenRepositoryExtended(source, git.RepositoryOpenCrossFs, "")
+	repo, err := git.OpenRepositoryExtended(source, git.RepositoryOpenFromEnv, "")
 	if err != nil {
 		return nil, err
 	}
