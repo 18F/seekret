@@ -2,16 +2,15 @@ package sourcegit
 
 import (
 	"fmt"
+	"github.com/18F/seekret"
+	"github.com/18F/seekret/models"
 	"github.com/emptyinterface/sshconfig"
 	"github.com/libgit2/git2go"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"regexp"
-	"github.com/18F/seekret"
-	"github.com/18F/seekret/models"
 )
-
 
 var (
 	SourceTypeGit = &SourceGit{}
@@ -22,7 +21,6 @@ const (
 )
 
 type SourceGit struct{}
-
 
 type SourceGitLoadOptions struct {
 	// commit-files: Include commited file content as object.
@@ -38,9 +36,9 @@ type SourceGitLoadOptions struct {
 
 func prepareGitLoadOptions(o seekret.LoadOptions) SourceGitLoadOptions {
 	opt := SourceGitLoadOptions{
-		CommitFiles: false,
+		CommitFiles:    false,
 		CommitMessages: false,
-		StagedFiles: false,
+		StagedFiles:    false,
 
 		CommitCount: 0,
 	}
@@ -75,17 +73,17 @@ func (s *SourceGit) LoadObjects(source string, opta seekret.LoadOptions) ([]mode
 	}
 
 	if opt.CommitFiles && opt.CommitMessages {
-		objectListCommit,err := objectsFromCommit(repo, opt.CommitFiles, opt.CommitMessages, opt.CommitCount)
+		objectListCommit, err := objectsFromCommit(repo, opt.CommitFiles, opt.CommitMessages, opt.CommitCount)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 		objectList = append(objectList, objectListCommit...)
 	}
 
 	if opt.StagedFiles {
-		objectListStagedFiles,err := objectsFromStagedFiles(repo)
+		objectListStagedFiles, err := objectsFromStagedFiles(repo)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 		objectList = append(objectList, objectListStagedFiles...)
 	}
@@ -106,13 +104,13 @@ func objectsFromCommit(repo *git.Repository, commitFiles bool, commitMessages bo
 		if err != nil {
 			err := walk.PushHead()
 			if err != nil {
-				return nil,err
+				return nil, err
 			}
 		}
 	} else {
 		err := walk.PushHead()
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 	}
 	walk.Sorting(git.SortTime)
@@ -128,7 +126,6 @@ func objectsFromCommit(repo *git.Repository, commitFiles bool, commitMessages bo
 			o.SetMetadata("commit", commit.Id().String(), models.MetadataAttributes{})
 			objectList = append(objectList, *o)
 		}
-
 
 		if commitFiles {
 			// TODO: what to return?
@@ -162,44 +159,46 @@ func objectsFromCommit(repo *git.Repository, commitFiles bool, commitMessages bo
 	return objectList, nil
 }
 
-
 func objectsFromStagedFiles(repo *git.Repository) ([]models.Object, error) {
 	var objectList []models.Object
 
-	index, err := repo.Index()
+	opts := &git.StatusOptions{}
+	opts.Show = git.StatusShowIndexOnly
+	opts.Flags = git.StatusOptRenamesHeadToIndex | git.StatusOptSortCaseSensitively | git.StatusOptUpdateIndex
+	statusList, err := repo.StatusList(opts)
 	if err != nil {
-		return nil,err
+		return nil, err
+	}
+	defer statusList.Free()
+
+	count, err := statusList.EntryCount()
+	if err != nil {
+		return nil, err
 	}
 
-	for i := 0; i < int(index.EntryCount()); i++ {
-
-		entry, err := index.EntryByIndex(uint(i))
+	for idx := 0; idx < count; idx++ {
+		entry, err := statusList.ByIndex(idx)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 
-		status, err := repo.StatusFile(entry.Path)
-		if err != nil {
-			return nil,err
-		}
-
-		if status != git.StatusCurrent {
-			blob, err := repo.LookupBlob(entry.Id)
+		if entry.Status == git.StatusIndexNew || entry.Status == git.StatusIndexModified ||
+			entry.Status == git.StatusIndexRenamed || entry.Status == git.StatusIndexTypeChange {
+			entryFile := entry.HeadToIndex.NewFile
+			blob, err := repo.LookupBlob(entryFile.Oid)
 			if err != nil {
-				return nil,err
+				return nil, err
 			}
 
-			o := models.NewObject(entry.Path, Type, "file-content", blob.Contents())
+			o := models.NewObject(entryFile.Path, Type, "file-content", blob.Contents())
 
-			// TODO: Type of staged.
 			o.SetMetadata("status", "staged", models.MetadataAttributes{})
 			objectList = append(objectList, *o)
 		}
 	}
 
-	return objectList,nil
+	return objectList, nil
 }
-
 
 func credentialsCallback(gitUri string, username string, allowedTypes git.CredType) (git.ErrorCode, *git.Cred) {
 	sshConfigFile := os.ExpandEnv("$HOME/.ssh/config")
@@ -295,8 +294,8 @@ func openGitRepoRemote(gitUri string) (*git.Repository, error) {
 }
 
 func openGitRepoLocal(source string) (*git.Repository, error) {
-	repo, err := git.OpenRepositoryExtended(source, git.RepositoryOpenCrossFs, "")
-	if  err != nil{
+	repo, err := git.OpenRepositoryExtended(source, git.RepositoryOpenFromEnv, "")
+	if err != nil {
 		return nil, err
 	}
 
