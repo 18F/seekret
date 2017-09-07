@@ -1,4 +1,4 @@
-|Build Status| |Documentation Status|
+|Documentation Status|
 
 =======
 seekret
@@ -317,10 +317,6 @@ Contains a regexp that should match the content.
 
 
 
-.. |Build Status| image:: https://travis-ci.org/18F/seekret.svg
-   :target: https://travis-ci.org/18F/seekret
-   :width: 88px
-   :height: 20px
 .. |Documentation Status| image:: https://godoc.org/github.com/18F/seekret?status.svg
    :target: https://godoc.org/github.com/18F/seekret
    :width: 88px
